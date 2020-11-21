@@ -1,0 +1,49 @@
+﻿.conveyor-panel {
+    position: fixed;
+    top:15%;
+    width:30%;
+    left:3%;
+}
+
+.conveyor-panel-checkbox {
+    font-size: 35px;
+    margin:4px;
+}
+
+.conveyor-panel-button button {
+    font-size:29px;
+    width: 50%;
+    line-height:200%;
+    margin: 7px;
+}
+
+.conveyor{
+    border:3px solid black;
+    position:fixed;
+    width:60%;
+    top:30%;
+    height:20%;
+    right:11%;
+}
+
+.conveyor-product {
+    border: 2px solid #ffffff;
+}
+
+.conveyor-product {
+    background: #4cff00;
+    width:18%;
+    height:90%;
+    margin:5px;
+    position:relative;
+    display:inline-block;
+    float:right;
+}
+
+.conveyor-product-good {
+    background: #4cff00;
+}
+
+.conveyor-panel-defective{
+    background: #fffa08;
+}

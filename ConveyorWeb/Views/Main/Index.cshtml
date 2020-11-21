@@ -1,5 +1,34 @@
-﻿@{
+﻿@section link{
+    <link rel="stylesheet" type="text/css" href="~/css/main.css" />
+}
+
+@{
     ViewData["Title"] = "Главная страница";
 }
 
+<!--Панель управления конвеером-->
+<div class="conveyor-panel">
+    <div class="conveyor-panel-checkbox">
+        <br /> <input type="radio" name="product-type[]" value="good" checked="checked" /> Хороший
+        <br /> <input type="radio" name="product-type[]" value="defective" /> Брак
+    </div>
 
+    <div class="conveyor-panel-button" >
+        <br /> <button name="addProduct">Добавить</button>
+        <br /> <button name="pushProduct">Убрать</button>
+    </div>
+
+</div>
+
+<!--Отображение конеера-->
+<div class="conveyor" id="conveyor_panel">
+
+</div>
+
+<!--Загрузка скриптов-->
+@section Scripts{
+    <script src="~/js/main.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", LoadPage);
+    </script>
+}
