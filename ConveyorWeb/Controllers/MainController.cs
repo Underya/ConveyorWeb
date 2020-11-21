@@ -18,6 +18,13 @@ namespace ConveyorWeb.Controllers
             _logger = logger;
         }
 
+        [HttpPost]
+        public JsonResult State()
+        {
+            string[] state = new string[] { "good", "defective", "good" };
+            return Json(state);
+        }
+
         public IActionResult Index()
         {
             return View();

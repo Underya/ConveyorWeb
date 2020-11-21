@@ -3,18 +3,18 @@ function UpdatePanel() {
     //Сначала очищается содержимое панели
     let panel = document.getElementById("conveyor_panel");
     panel.innerHTML = "";
+    
     //Запрос, на получение нового содержимого
-
-    //Заполнение содержимым
-    let product = document.createElement('div');
-    let product2 = document.createElement('div');
-    let product_class = "conveyor-product";
-    let good_class = product_class + " " + "conveyor-product-good";
-    let defective_class = product_class + " " + "conveyor-panel-defective";
-    product.className = good_class;
-    product2.className = defective_class;
-    panel.appendChild(product);
-    panel.appendChild(product2);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "https://localhost:44367/main/state", false);
+    xhr.send();
+    //Получение массива значений
+    var products = JSON.parse(xhr.responseText);
+    //Получение отдельных продуктов
+    for (index = 0; index < products.length; index++) {
+        //Получение и добавление продукта
+        panel.appendChild(GetNewProdyct(products[index]));
+    }
 }
 
 //Функция возвращает новый продукт
@@ -22,7 +22,21 @@ function UpdatePanel() {
 function GetNewProdyct(type) {
     //Создание нового продукта
     let product = document.createElement('div');
-    //Указание типа в зависимости от 
+    //Указание класса в зависимости от типа
+    let product_class = "conveyor-product";
+    if (type == "good")
+        product_class += " " + "conveyor-product-good";
+    else if (type == "defective")
+        product_class += " " + "conveyor-product-defective";
+    else {
+        //Если ни один из типов не подходит, выбросить ошибку
+        alert("Непредведенный тип!");
+    }
+
+    //Указние стиля
+    product.className = product_class;
+    //Возвращение объекта
+    return product;
 }
 
 //Функция, инициализирующая страницу
