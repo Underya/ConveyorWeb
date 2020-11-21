@@ -3,24 +3,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
-<body>
-    <header>
-        <nav>
-            <div>
-                <a href="google.com">Гугл</a>
-            </div>
-        </nav>
-    </header>
+<body class="layout-body">
 
     <!--Главное содержимое таблицы!-->
     <main>
-        @RenderBody();
+        @RenderBody()
     </main>
 
-    <footer >
-        <div class="layout-footer">
-            
+    <!--Обязательная нижния планка-->
+    <footer class="footer-layout">
+        <div>
+            <div class="footer-layout-text">Автор приложения (С)| 2020</div>
         </div>
     </footer>
     @RenderSection("Scripts", required: false)
