@@ -31,7 +31,7 @@ namespace ConveyorWeb.Controllers
         public JsonResult State()
         {
             //Получение состояния
-            WebRequest request = WebRequest.Create("http://localhost:60156/Conveyor/getstate");
+            WebRequest request = WebRequest.Create("http://localhost:5000/Conveyor/getstate");
             request.Method = "POST";
             string res = "";
             WebResponse response = request.GetResponse();
@@ -59,7 +59,7 @@ namespace ConveyorWeb.Controllers
             HttpClient client = new HttpClient();
             HttpRequestMessage request = new HttpRequestMessage
             {
-                RequestUri = new Uri("http://localhost:60156/Conveyor/add"),
+                RequestUri = new Uri("http://localhost:5000/Conveyor/add"),
                 Method = HttpMethod.Post,
                 Content = new StringContent(type)
             };
@@ -71,31 +71,6 @@ namespace ConveyorWeb.Controllers
                 string responseText = response.Content.ReadAsStringAsync().Result;
                 throw new Exception(responseText);
             }
-            /*HttpWebRequest request =  (HttpWebRequest)HttpWebRequest.Create("http://localhost:60156/Conveyor/AddProduct");
-            request.Method = "POST";
-            //request.ContentType = "application / x - www - form - urlencoded";
-            string text_param = "type=" + type;
-            byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(text_param);
-            request.ContentLength = byteArray.Length;
-            //Запись данных в поток
-            using (Stream dataStream = request.GetRequestStream())
-            {
-                dataStream.Write(byteArray, 0, byteArray.Length);
-            }
-
-            //Получение ответа
-            string responseText = "";
-            WebResponse response = request.GetResponse();
-            using (Stream stream = response.GetResponseStream())
-            {
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    responseText = reader.ReadToEnd();
-                }
-            }
-            if(responseText == "200")
-                return StatusCode(200);
-            return StatusCode(int.Parse(responseText));*/
             return StatusCode(200);
         }
 
@@ -107,7 +82,7 @@ namespace ConveyorWeb.Controllers
         public IActionResult PushProduct()
         {
             //Получение состояния
-            WebRequest request = WebRequest.Create("http://localhost:60156/Conveyor/push");
+            WebRequest request = WebRequest.Create("http://localhost:5000/Conveyor/push");
             request.Method = "POST";
             string res = "";
             WebResponse response = request.GetResponse();
@@ -118,7 +93,7 @@ namespace ConveyorWeb.Controllers
                     res = reader.ReadToEnd();
                 }
             }
-            if (res != "200")
+            if (res != "")
                 throw new Exception(res);
             //Десериализация
             return StatusCode(200);
