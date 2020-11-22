@@ -5,86 +5,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace ConveyorWebServer.Controllers
 {
     [ApiController]
     [Route("[controller]")]
     public class ConveyorController : Controller
     {
-
-        [HttpGet]
-        public JsonResult Index()
+        [HttpPost("state")]
+        public JsonResult GetState([FromServices] IConveyor conveyor)
         {
-            return Json("text");
-        }
-
-        // GET: ConveyorController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ConveyorController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ConveyorController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            //Получение состояния
+            List<int> states = conveyor.State;
+            List<string> strState = new List<string>();
+            foreach (int type in states)
             {
-                return RedirectToAction(nameof(Index));
+                if (type == 1)
+                    strState.Add("good");
+                else if (type == 2)
+                    strState.Add("defective");
+                else;
+                //Тут происходит обработка ошибки
             }
-            catch
-            {
-                return View();
-            }
+            //Сериализация и ответ серверу
+            return Json(strState);
         }
 
-        // GET: ConveyorController/Edit/5
-        public ActionResult Edit(int id)
+        /// <summary>
+        /// Добавление новго продукта
+        /// </summary>
+        /// <param name="type">Тип нового продукта, который надо добавить</param>
+        /// <returns></returns>
+        [HttpPost("add", Name ="type")]
+        public IActionResult AddProduct(string type, [FromServices] IConveyor conveyor)
         {
-            return View();
+
+            if (type == "good")
+                conveyor.AddProduct(1);
+            else if (type == "defective")
+                conveyor.AddProduct(2);
+            else
+                throw new Exception("Передан не правильный продукт");
+            //Добавление, в зависимости от типа
+            return StatusCode(200);
         }
 
-        // POST: ConveyorController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+
+        /// <summary>
+        /// Обработка запросы на выкидывания продутка из конвера
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("push")]
+        public IActionResult PushProduct([FromServices] IConveyor conveyor)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            conveyor.PushProdcut();
+            return StatusCode(200);
         }
 
-        // GET: ConveyorController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: ConveyorController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }

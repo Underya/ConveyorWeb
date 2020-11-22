@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ConveyorWeb
+namespace ConveyorWebServer
 {
     /// <summary>
     /// Конвеер с продуктами, который могут быть в нескольких состояних

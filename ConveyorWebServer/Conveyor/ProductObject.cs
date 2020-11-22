@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 using System.Runtime.CompilerServices;
 
-namespace ConveyorWeb
+namespace ConveyorWebServer
 {
     /// <summary>
     /// Возможные типы продуктов
