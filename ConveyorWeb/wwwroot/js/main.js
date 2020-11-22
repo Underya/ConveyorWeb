@@ -18,6 +18,11 @@ function UpdatePanel() {
 }
 
 
+//Метод для вывода ошибки пользователю
+function ShowError(errorText) {
+    alert(errorText);
+}
+
 //Запрос на добавление новой продукции в конвеер
 function addButtonClick() {
     //Получение типа продукта, который надо добавить
@@ -28,20 +33,33 @@ function addButtonClick() {
         Addr += "?type=good";
     if (defective.checked)
         Addr += "?type=defective";
-    
+
     let xhr = new XMLHttpRequest();
     xhr.open('GET', Addr, false);
     //xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
-    if (xhr.status != 200)
-        alert("Чёт ошибка!");
+    if (xhr.status != 200) {
+        let error_text = "Не удалось добавить продукт: ";
+        error_text += xhr.responseText;
+        ShowError(error_text);
+    }
     //Обновление страницы
     UpdatePanel();
 }
 
 //Запрос на извлечение конвеера с ленты
 function pushButtonClick() {
-    alert("Push Button");
+    let Addr = "https://localhost:44367/main/pushproduct";
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", Addr, false);
+    xhr.send();
+    if (xhr.status != 200) {
+        let error_text = "Не удалось извлечь продукт: ";
+        error_text += xhr.responseText;
+        ShowError(error_text);
+    }
+    //Обновление страницы
+    UpdatePanel();
 }
 
 //Функция возвращает новый продукт

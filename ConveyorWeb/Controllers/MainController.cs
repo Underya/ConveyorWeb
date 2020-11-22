@@ -48,12 +48,13 @@ namespace ConveyorWeb.Controllers
         [HttpGet]
         public IActionResult AddProduct(string type)
         {
+
             if (type == "good")
                 conveyor.AddProduct(1);
             else if (type == "defective")
                 conveyor.AddProduct(2);
             else
-                throw new Exception("Передан не правильный продукта");
+                throw new Exception("Передан не правильный продукт");
             //Добавление, в зависимости от типа
             return StatusCode(200);
         }
