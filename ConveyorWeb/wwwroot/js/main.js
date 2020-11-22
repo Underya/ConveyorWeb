@@ -14,7 +14,6 @@ function UpdatePanel() {
             ShowError(xhr.responseText);
             return;
         }
-
         //Добавление новых элементов
         //Получение массива значений
         var products = JSON.parse(xhr.responseText);
@@ -50,30 +49,35 @@ function addButtonClick() {
     date.append('type', typeProd);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('POST', "https://localhost:44367/main/AddProduct", false);
-    xhr.send(date);
-    if (xhr.status != 200) {
-        let error_text = "Не удалось добавить продукт: ";
-        error_text += xhr.responseText;
-        ShowError(error_text);
+    xhr.open('POST', "https://localhost:44367/main/AddProduct", true);
+    xhr.onload = function () {
+        if (xhr.status != 200) {
+            let error_text = "Не удалось добавить продукт: ";
+            error_text += xhr.responseText;
+            ShowError(error_text);
+        }
+        //Обновление страницы
+        UpdatePanel();
     }
-    //Обновление страницы
-    UpdatePanel();
+    xhr.send(date);
 }
 
 //Запрос на извлечение конвеера с ленты
 function pushButtonClick() {
     let Addr = "https://localhost:44367/main/pushproduct";
     let xhr = new XMLHttpRequest();
-    xhr.open("POST", Addr, false);
-    xhr.send();
-    if (xhr.status != 200) {
-        let error_text = "Не удалось извлечь продукт: ";
-        error_text += xhr.responseText;
-        ShowError(error_text);
+    xhr.open("POST", Addr, true);
+    xhr.onload = function () {
+        if (xhr.status != 200) {
+            let error_text = "Не удалось извлечь продукт: ";
+            error_text += xhr.responseText;
+            ShowError(error_text);
+        }
+        //Обновление страницы
+        UpdatePanel();
     }
-    //Обновление страницы
-    UpdatePanel();
+
+    xhr.send();
 }
 
 //Функция возвращает новый продукт
