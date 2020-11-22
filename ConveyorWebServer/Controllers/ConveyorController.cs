@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 
@@ -12,7 +13,7 @@ namespace ConveyorWebServer.Controllers
     [Route("[controller]")]
     public class ConveyorController : Controller
     {
-        [HttpPost("state")]
+        [HttpPost("getstate")]
         public JsonResult GetState([FromServices] IConveyor conveyor)
         {
             //Получение состояния
@@ -33,20 +34,23 @@ namespace ConveyorWebServer.Controllers
 
         /// <summary>
         /// Добавление новго продукта
-        /// </summary>
+        /// </summary>1
         /// <param name="type">Тип нового продукта, который надо добавить</param>
         /// <returns></returns>
-        [HttpPost("add", Name ="type")]
-        public IActionResult AddProduct(string type, [FromServices] IConveyor conveyor)
+        [HttpPost("add")]
+        public IActionResult AddProduct([FromServices] IConveyor conveyor)
         {
-
-            if (type == "good")
+            //Получение типа, который надо добавить
+            var body = Request.BodyReader;
+            var result = body.ReadAsync();
+            var text2 = result.Result.Buffer;
+            string type = Encoding.UTF8.GetString(text2);
+            if (type == "good") 
                 conveyor.AddProduct(1);
-            else if (type == "defective")
+            else if (type == "defective") 
                 conveyor.AddProduct(2);
             else
                 throw new Exception("Передан не правильный продукт");
-            //Добавление, в зависимости от типа
             return StatusCode(200);
         }
 

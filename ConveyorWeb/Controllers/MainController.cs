@@ -4,8 +4,14 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
+using System.IO;
+using System.Text.Json;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using Microsoft.AspNetCore.Http;
+using System.Reflection.Metadata.Ecma335;
 
 namespace ConveyorWeb.Controllers
 {
@@ -25,19 +31,21 @@ namespace ConveyorWeb.Controllers
         public JsonResult State()
         {
             //Получение состояния
-            List<int> states = conveyor.State;
-            List<string> strState = new List<string>();
-            foreach (int type in states) 
+            WebRequest request = WebRequest.Create("http://localhost:60156/Conveyor/getstate");
+            request.Method = "POST";
+            string res = "";
+            WebResponse response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream())
             {
-                if (type == 1)
-                    strState.Add("good");
-                else if (type == 2)
-                    strState.Add("defective");
-                else;
-                    //Тут происходит обработка ошибки
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    res = reader.ReadToEnd();
+                }
             }
-            //Сериализация и ответ серверу
-            return Json(strState);
+            //Десериализация
+            string[] jsonRes = JsonSerializer.Deserialize<string[]>(res);
+            response.Close();
+            return Json(jsonRes);
         }
 
         /// <summary>
@@ -48,14 +56,46 @@ namespace ConveyorWeb.Controllers
         [HttpPost]
         public IActionResult AddProduct(string type)
         {
+            HttpClient client = new HttpClient();
+            HttpRequestMessage request = new HttpRequestMessage
+            {
+                RequestUri = new Uri("http://localhost:60156/Conveyor/add"),
+                Method = HttpMethod.Post,
+                Content = new StringContent(type)
+            };
+            var post = client.PostAsync(request.RequestUri, request.Content);
+            post.Wait();
+            HttpResponseMessage response = post.Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                string responseText = response.Content.ReadAsStringAsync().Result;
+                throw new Exception(responseText);
+            }
+            /*HttpWebRequest request =  (HttpWebRequest)HttpWebRequest.Create("http://localhost:60156/Conveyor/AddProduct");
+            request.Method = "POST";
+            //request.ContentType = "application / x - www - form - urlencoded";
+            string text_param = "type=" + type;
+            byte[] byteArray = System.Text.Encoding.UTF8.GetBytes(text_param);
+            request.ContentLength = byteArray.Length;
+            //Запись данных в поток
+            using (Stream dataStream = request.GetRequestStream())
+            {
+                dataStream.Write(byteArray, 0, byteArray.Length);
+            }
 
-            if (type == "good")
-                conveyor.AddProduct(1);
-            else if (type == "defective")
-                conveyor.AddProduct(2);
-            else
-                throw new Exception("Передан не правильный продукт");
-            //Добавление, в зависимости от типа
+            //Получение ответа
+            string responseText = "";
+            WebResponse response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    responseText = reader.ReadToEnd();
+                }
+            }
+            if(responseText == "200")
+                return StatusCode(200);
+            return StatusCode(int.Parse(responseText));*/
             return StatusCode(200);
         }
 
@@ -66,7 +106,21 @@ namespace ConveyorWeb.Controllers
         [HttpPost]
         public IActionResult PushProduct()
         {
-            conveyor.PushProdcut();
+            //Получение состояния
+            WebRequest request = WebRequest.Create("http://localhost:60156/Conveyor/push");
+            request.Method = "POST";
+            string res = "";
+            WebResponse response = request.GetResponse();
+            using (Stream stream = response.GetResponseStream())
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    res = reader.ReadToEnd();
+                }
+            }
+            if (res != "200")
+                throw new Exception(res);
+            //Десериализация
             return StatusCode(200);
         }
 
