@@ -17,6 +17,33 @@ function UpdatePanel() {
     }
 }
 
+
+//Запрос на добавление новой продукции в конвеер
+function addButtonClick() {
+    //Получение типа продукта, который надо добавить
+    let Addr = "https://localhost:44367/main/AddProduct";
+    let good = document.getElementById("goodradio");
+    let defective = document.getElementById("defectiveradio")
+    if (good.checked)
+        Addr += "?type=good";
+    if (defective.checked)
+        Addr += "?type=defective";
+    
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', Addr, false);
+    //xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send();
+    if (xhr.status != 200)
+        alert("Чёт ошибка!");
+    //Обновление страницы
+    UpdatePanel();
+}
+
+//Запрос на извлечение конвеера с ленты
+function pushButtonClick() {
+    alert("Push Button");
+}
+
 //Функция возвращает новый продукт
 //Зависящий от типа
 function GetNewProdyct(type) {

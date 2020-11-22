@@ -9,13 +9,13 @@
 <!--Панель управления конвеером-->
 <div class="conveyor-panel">
     <div class="conveyor-panel-checkbox">
-        <br /> <input type="radio" name="product-type[]" value="good" checked="checked" /> Хороший
-        <br /> <input type="radio" name="product-type[]" value="defective" /> Брак
+        <br /> <input type="radio" name="product-type[]" value="good" checked="checked" id="goodradio" /> Хороший
+        <br /> <input type="radio" name="product-type[]" value="defective" id="defectiveradio"/> Брак
     </div>
 
     <div class="conveyor-panel-button" >
-        <br /> <button name="addProduct">Добавить</button>
-        <br /> <button name="pushProduct">Убрать</button>
+        <br /> <button name="addProduct" onclick="addButtonClick()">Добавить</button>
+        <br /> <button name="pushProduct" onclick="pushButtonClick()">Убрать</button>
     </div>
 
 </div>

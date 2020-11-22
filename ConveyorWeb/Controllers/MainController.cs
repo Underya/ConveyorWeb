@@ -13,16 +13,60 @@ namespace ConveyorWeb.Controllers
     {
         private readonly ILogger<MainController> _logger;
 
-        public MainController(ILogger<MainController> logger)
+        IConveyor conveyor = null;
+
+        public MainController(ILogger<MainController> logger, IConveyor conveyor)
         {
             _logger = logger;
+           this.conveyor = conveyor;
         }
 
         [HttpPost]
         public JsonResult State()
         {
-            string[] state = new string[] { "good", "defective", "good" };
-            return Json(state);
+            //Получение состояния
+            List<int> states = conveyor.State;
+            List<string> strState = new List<string>();
+            foreach (int type in states) 
+            {
+                if (type == 1)
+                    strState.Add("good");
+                else if (type == 2)
+                    strState.Add("defective");
+                else;
+                    //Тут происходит обработка ошибки
+            }
+            //Сериализация и ответ серверу
+            return Json(strState);
+        }
+
+        /// <summary>
+        /// Добавление новго продукта
+        /// </summary>
+        /// <param name="type">Тип нового продукта, который надо добавить</param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult AddProduct(string type)
+        {
+            if (type == "good")
+                conveyor.AddProduct(1);
+            else if (type == "defective")
+                conveyor.AddProduct(2);
+            else
+                throw new Exception("Передан не правильный продукта");
+            //Добавление, в зависимости от типа
+            return StatusCode(200);
+        }
+
+        /// <summary>
+        /// Обработка запросы на выкидывания продутка из конвера
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult PushProduct()
+        {
+            conveyor.PushProdcut();
+            return StatusCode(200);
         }
 
         public IActionResult Index()
