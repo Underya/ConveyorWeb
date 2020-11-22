@@ -6,15 +6,26 @@ function UpdatePanel() {
     
     //Запрос, на получение нового содержимого
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', "https://localhost:44367/main/state", false);
-    xhr.send();
-    //Получение массива значений
-    var products = JSON.parse(xhr.responseText);
-    //Получение отдельных продуктов
-    for (index = 0; index < products.length; index++) {
-        //Получение и добавление продукта
-        panel.appendChild(GetNewProdyct(products[index]));
+    xhr.open('POST', "https://localhost:44367/main/state", true);
+    //При загрузке данных
+    xhr.onload = function () {
+        //Если не удачно, выброс ошибки
+        if (xhr.status != 200) {
+            ShowError(xhr.responseText);
+            return;
+        }
+
+        //Добавление новых элементов
+        //Получение массива значений
+        var products = JSON.parse(xhr.responseText);
+        //Получение отдельных продуктов
+        for (index = 0; index < products.length; index++) {
+            //Получение и добавление продукта
+            panel.appendChild(GetNewProdyct(products[index]));
+        }
     }
+    xhr.send();
+
 }
 
 
