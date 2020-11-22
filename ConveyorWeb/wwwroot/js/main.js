@@ -26,18 +26,21 @@ function ShowError(errorText) {
 //Запрос на добавление новой продукции в конвеер
 function addButtonClick() {
     //Получение типа продукта, который надо добавить
-    let Addr = "https://localhost:44367/main/AddProduct";
+    let typeProd = "";
     let good = document.getElementById("goodradio");
     let defective = document.getElementById("defectiveradio")
     if (good.checked)
-        Addr += "?type=good";
+        typeProd = "good";
     if (defective.checked)
-        Addr += "?type=defective";
+        typeProd = "defective";
+
+    //Формирование тела запроса
+    let date = new FormData();
+    date.append('type', typeProd);
 
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', Addr, false);
-    //xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.send();
+    xhr.open('POST', "https://localhost:44367/main/AddProduct", false);
+    xhr.send(date);
     if (xhr.status != 200) {
         let error_text = "Не удалось добавить продукт: ";
         error_text += xhr.responseText;

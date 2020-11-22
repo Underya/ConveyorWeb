@@ -45,7 +45,7 @@ namespace ConveyorWeb.Controllers
         /// </summary>
         /// <param name="type">Тип нового продукта, который надо добавить</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         public IActionResult AddProduct(string type)
         {
 
